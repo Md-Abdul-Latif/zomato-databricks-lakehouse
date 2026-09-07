@@ -1,0 +1,26 @@
+# ============================================================
+# Zomato ETL Pipeline - Python Dependencies
+# ============================================================
+# This project runs on Databricks Runtime, which includes
+# most of these dependencies by default.
+# This file is for local development and reference.
+
+# Core Spark (Databricks Runtime includes this)
+pyspark>=3.4.0
+
+# Delta Lake (Databricks Runtime includes this)
+delta-spark>=2.4.0
+
+# Data manipulation (for local testing)
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Configuration and utilities
+python-dotenv>=1.0.0
+
+# For local development environment
+# Note: On Databricks, these are already pre-installed

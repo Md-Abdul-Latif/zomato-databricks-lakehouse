@@ -1,23 +1,66 @@
-# Source data
+# ============================================================
+# Zomato ETL Pipeline - .gitignore
+# ============================================================
+
+# Source data (CSV files are large and should not be committed)
 data/source/
 
 # Python
 __pycache__/
 *.py[cod]
+*.pyo
+*.pyd
 .venv/
 venv/
+ENV/
+env/
+poetry.lock
+
+# Jupyter Notebooks (DO NOT ignore .ipynb files)
+# Only ignore checkpoint folders
+.ipynb_checkpoints/
+*.ipynb_checkpoints
 
 # Databricks
 .databricks/
+.databricks.log
+*.dbinfo
 
 # IDE
 .idea/
 .vscode/
+*.swp
+*.swo
+*~
 
 # OS
 .DS_Store
 Thumbs.db
+*.log
 
-# Secrets
+# Secrets and credentials
 .env
+.env.local
 *.pem
+*.key
+*.crt
+*.p12
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Logs
+logs/
+*.log
+
+# Backup files
+*.bak
+*.tmp
