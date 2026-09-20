@@ -34,18 +34,6 @@ jobs:
 
       - name: Check repository structure
         run: |
-          echo "Current directory:"
-          pwd
-
-          echo "Repository contents:"
-          ls -la
-
-          echo "Notebook directory:"
-          ls -la notebooks || true
-
-          echo "Tracked notebook files:"
-          git ls-files notebooks
-
           test -d notebooks
           test -d src
           test -d sql
@@ -53,6 +41,7 @@ jobs:
           test -d docs
           test -f README.md
           test -f requirements.txt
+
 
       - name: CI completed
         run: echo "Repository validation completed successfully."
