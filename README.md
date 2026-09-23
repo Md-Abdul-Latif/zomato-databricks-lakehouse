@@ -1,14 +1,27 @@
 # Zomato Databricks Lakehouse & Analytics Project
 
-A modern **data engineering and analytics project built on Databricks** using a Zomato restaurant and food-order dataset.
+An end-to-end data engineering project built on Databricks using
+PySpark, Spark SQL, Delta Lake, and Databricks SQL.
 
-The project demonstrates an end-to-end **Lakehouse architecture**, including data ingestion, transformation, data quality validation, dimensional modeling, fact-table creation, and analytical dashboards.
+The project implements a Medallion Architecture (Bronze → Silver → Gold)
+to transform raw Zomato CSV data into validated, analytics-ready datasets
+and business dashboards.
 
-## 🚧 Project Status
+## 🚦 Project Status
 
-**Currently in development**
+**Portfolio-ready implementation**
 
-The core Bronze, Silver, and Gold data layers have been implemented and validated. Dashboard development and final documentation are currently in progress.
+The core data engineering pipeline has been implemented and validated,
+including:
+
+- Bronze, Silver, and Gold Lakehouse layers
+- Delta-based data storage
+- PySpark and Spark SQL transformations
+- Data quality validation
+- Gold analytical datasets
+- Databricks SQL dashboards
+- Databricks lineage documentation
+- GitHub Actions CI validation
 
 ---
 
@@ -22,7 +35,8 @@ The main objectives of this project are to:
 * Store transformed data using Delta tables
 * Clean and standardize raw data
 * Handle invalid and duplicate records
-* Implement dimensional and fact-table modeling
+* Implement dimensional and analytical modeling
+* Build analytics-ready Gold datasets
 * Perform data quality and validation checks
 * Create business-oriented analytical datasets
 * Build interactive dashboards using Databricks SQL
@@ -40,10 +54,10 @@ The project follows a Medallion/Lakehouse architecture:
                     │                      │
                     │ countries.csv        │
                     │ foods.csv            │
-                    │ menus.csv             │
-                    │ orders.csv            │
+                    │ menus.csv            │
+                    │ orders.csv           │
                     │ restaurants.csv      │
-                    │ users.csv             │
+                    │ users.csv            │
                     └──────────┬───────────┘
                                │
                                ▼
@@ -70,7 +84,7 @@ The project follows a Medallion/Lakehouse architecture:
                     │      Gold Layer      │
                     │                      │
                     │ Dimensions           │
-                    │ Fact Tables          │
+                    │ Analytical Datasets  │
                     │ Aggregations         │
                     │ Business Metrics     │
                     └──────────┬───────────┘
@@ -141,14 +155,22 @@ Current Gold datasets include:
 
 ### Dimension Tables
 
-* `dim_foods`
-* `dim_users`
-* `dim_restaurants`
+| Table             |    Rows |
+| ----------------- | ------: |
+| `dim_restaurants` | 148,541 |
+| `dim_users`       | 100,000 |
+| `dim_foods`       | 371,563 |
 
-### Fact / Analytical Tables
 
-* `daily_sales`
-* `customer_order_analysis`
+### Analytical Tables
+
+| Table                     |    Rows |
+| ------------------------- | ------: |
+| `restaurant_performance`  |     281 |
+| `customer_order_analysis` |     281 |
+| `food_menu_analysis`      | 665,517 |
+| `daily_sales`             |     209 |
+
 
 The Gold layer combines cleaned transactional and reference data to provide meaningful business metrics for analytical reporting.
 
@@ -169,71 +191,78 @@ Current validation checks include:
 * Invalid identifier detection
 * Overall table status validation
 
-Example validation result:
+All validated Gold analytical datasets passed the implemented
+data-quality checks.
 
-```text
-table_name                overall_status
------------------------------------------
-customer_order_analysis  PASS
-daily_sales              PASS
-dim_foods                PASS
-dim_restaurants          PASS
-dim_users                PASS
-```
-
-The data quality notebook is responsible for validating the final analytical datasets before dashboard consumption.
+See [`05_data_quality.ipynb`](notebooks/05_data_quality.ipynb) for the
+implemented validation checks.
 
 ---
 
-## 📊 Dashboard
+## 📊 Databricks SQL Dashboards
 
-The project includes analytical dashboards built using **Databricks SQL**.
+The Gold analytical datasets are consumed by Databricks SQL dashboards
+covering the following business areas.
 
-Dashboard development is currently in progress.
+### Customer & Order Analysis
 
-The first dashboard focuses on **customer and order analysis**, with metrics and visualizations intended to provide insights into:
+Analysis of customer ordering behavior, order volume, sales,
+and customer-level activity.
 
-* Customer ordering behavior
-* Order volume
-* Sales performance
-* Restaurant activity
-* Food/menu activity
-* Customer-level order patterns
+![View Customer & Order Analysis Dashboard](docs/dashboards/zomato_customer_order_analysis.png)
 
-Additional dashboards and visualizations may be added as the project develops.
+### Location & Market Analysis
 
----
+Analysis of restaurant presence, food coverage, cities,
+and cuisine distribution.
+
+![View Location & Market Analysis Dashboard](docs/dashboards/zomato_location_market_analysis.png)
+
+### Restaurant & Food Performance
+
+Analysis of restaurant performance, food items, menus,
+and related business metrics.
+
+![View Restaurant & Food Performance Dashboard](docs/dashboards/zomato_restaurant_food_performance.png)
+
+### Sales Overview
+
+Analysis of sales trends, order volume, revenue,
+and average order metrics.
+
+![View Sales Overview Dashboard](docs/dashboards/zomato_sales_overview.png)
+
 
 ## 📁 Project Structure
 
 ```text
 zomato-databricks-lakehouse/
-│
+├── .github/
+│   └── workflows/
+│       └── ci.yml
 ├── data/
-│   ├── countries.csv
-│   ├── foods.csv
-│   ├── menus.csv
-│   ├── orders.csv
-│   ├── restaurants.csv
-│   └── users.csv
-│
+│   └── source/
 ├── docs/
-│   └── architecture/
-│
+│   ├── architecture/
+│   └── dashboards/
 ├── notebooks/
-│   ├── 01_bronze_ingestion.py
-│   ├── 02_silver_transformation.py
-│   ├── 03_gold_dimensions.py
-│   ├── 04_gold_fact_orders.py
-│   └── 05_data_quality.py
-│
+│   ├── 01_bronze_ingestion.ipynb
+│   ├── 02_silver_transformation.ipynb
+│   ├── 03_gold_dimensions.ipynb
+│   ├── 04_gold_analytics.ipynb
+│   └── 05_data_quality.ipynb
+├── sql/
+│   ├── bronze/
+│   ├── silver/
+│   ├── gold/
+│   └── three-schemas.sql
+├── src/
+├── tests/
 ├── .gitignore
 ├── README.md
 └── requirements.txt
 ```
-
 ---
-
 ## 🛠️ Technologies
 
 The project currently uses:
@@ -246,22 +275,23 @@ The project currently uses:
 * **Databricks SQL**
 * **Git / GitHub**
 * **Python**
+* **GitHub Actions**
 
 ---
 
 ## 📓 Notebooks
 
-| Notebook                      | Description                                      |
-| ----------------------------- | ------------------------------------------------ |
-| `01_bronze_ingestion.py`      | Ingests raw source files into the Bronze layer   |
-| `02_silver_transformation.py` | Cleans, standardizes, and validates source data  |
-| `03_gold_dimensions.py`       | Creates Gold dimension tables                    |
-| `04_gold_fact_orders.py`      | Creates analytical fact and aggregation datasets |
-| `05_data_quality.py`          | Performs data quality and integrity checks       |
+| Notebook                         | Purpose                                     |
+| -------------------------------- | ------------------------------------------- |
+| `01_bronze_ingestion.ipynb`      | Ingests source CSV data into Bronze         |
+| `02_silver_transformation.ipynb` | Cleans and standardizes Silver data         |
+| `03_gold_dimensions.ipynb`       | Creates Gold dimension tables               |
+| `04_gold_analytics.ipynb`        | Creates Gold analytical datasets            |
+| `05_data_quality.ipynb`          | Performs data quality and validation checks |
 
 ---
 
-## 📈 Current Data Scale
+## 📈 Processed Data Scale
 
 The current implementation processes approximately:
 
@@ -293,7 +323,7 @@ Data Cleaning & Validation
       ↓
 Gold Dimensions
       ↓
-Gold Fact / Analytical Tables
+Gold Analytical Datasets
       ↓
 Data Quality Checks
       ↓
@@ -306,19 +336,16 @@ Analytics Dashboards
 
 ## 🚀 Future Improvements
 
-Planned improvements include:
+Possible future enhancements include:
 
-* Complete the remaining Databricks SQL dashboards
-* Add additional business KPIs
-* Improve dashboard interactivity with filters
-* Add more advanced analytical queries
-* Improve pipeline orchestration
-* Add incremental ingestion
-* Add stronger schema evolution handling
-* Implement automated data-quality monitoring
-* Add CI/CD integration
-* Improve documentation and architecture diagrams
-* Add production-oriented monitoring and logging
+- Incremental data ingestion
+- Automated pipeline orchestration
+- Expanded data-quality monitoring
+- Schema evolution handling
+- Additional business metrics
+- Production-oriented monitoring and alerting
+- Advanced analytics and forecasting
+- Automated Databricks deployment workflows
 
 ---
 
